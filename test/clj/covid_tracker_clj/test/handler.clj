@@ -18,7 +18,7 @@
 
 (deftest test-app
   (testing "main route"
-    (let [response ((app) (request :get "/"))]
+    (let [response ((app) (request :get "/swagger-ui/index.html"))]
       (is (= 200 (:status response)))))
 
   (testing "not-found route"
