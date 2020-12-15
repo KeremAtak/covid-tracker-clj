@@ -1,0 +1,6 @@
+{
+    "name": "Covid Tracker Clj",
+    "description": "Backend for tracking finnish COVID infections.",
+    "image": "heroku/clojure",
+    "addons": [ "heroku-postgresql" ]
+  }

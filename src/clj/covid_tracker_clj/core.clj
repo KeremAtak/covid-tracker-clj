@@ -1,12 +1,13 @@
 (ns covid-tracker-clj.core
-    (:require [covid-tracker-clj.config :refer [env]]
-              [covid-tracker-clj.handler :as handler]
-              [covid-tracker-clj.nrepl :as nrepl]
-              [clojure.tools.cli :refer [parse-opts]]
-              [clojure.tools.logging :as log]
-              [luminus.http-server :as http]
-              [luminus-migrations.core :as migrations]
-              [mount.core :as mount]))
+  (:gen-class)
+  (:require [covid-tracker-clj.config :refer [env]]
+            [covid-tracker-clj.handler :as handler]
+            [covid-tracker-clj.nrepl :as nrepl]
+            [clojure.tools.cli :refer [parse-opts]]
+            [clojure.tools.logging :as log]
+            [luminus.http-server :as http]
+            [luminus-migrations.core :as migrations]
+            [mount.core :as mount]))
 
 ;; log uncaught exceptions in threads
 (Thread/setDefaultUncaughtExceptionHandler
