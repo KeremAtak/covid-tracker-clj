@@ -8,11 +8,7 @@
    ["/infections"
     ["/all"
      {:get {:summary "gets all infections"
-            ;; :responses {200 {:body thl-all-response}}
+            :responses {200 {:body thl-all-response}}
             :handler (fn [_]
-                       (let [data (get-thl-infections)]
-                         (println "dsadsadsa")
-                         (clojure.pprint/pprint data)
-                         {:status 200
-                          :body "DasDSAdASDSA"}
-                         #_(print "dadada: " (:body @data))))}}]]])
+                       {:status 200
+                        :body (get-thl-infections)})}}]]])
