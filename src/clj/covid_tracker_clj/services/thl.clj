@@ -3,9 +3,12 @@
             [muuntaja.core :as m]
             [covid-tracker-clj.config :refer [env]]))
 
-(defn get-thl-infections []
+(defn curl-thl [address]
   (->> 
-   (:thl-url env)
+   address
    get
    :body
    (m/decode "application/json")))
+
+(defn get-thl-infections []
+  (curl-thl (:thl-url env)))
