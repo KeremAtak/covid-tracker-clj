@@ -4,6 +4,7 @@
               [covid-tracker-clj.routes.files :refer [file-routes]]
               [covid-tracker-clj.routes.health :refer [health-routes]]
               [covid-tracker-clj.routes.math :refer [math-routes]]
+              [covid-tracker-clj.routes.thl :refer [thl-routes]]
               [reitit.coercion.spec :as spec-coercion]
               [reitit.ring.coercion :as coercion]
               [reitit.ring.middleware.multipart :as multipart]
@@ -48,4 +49,5 @@
              :config {:validator-url nil}})}]]
    (file-routes)
    (health-routes)
-   (math-routes)])
+   (math-routes)
+   (thl-routes)])

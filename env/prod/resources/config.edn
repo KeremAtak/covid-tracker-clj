@@ -1,3 +1,4 @@
 {:port 3000
  :prod true
- :database-url "postgresql://localhost/postgres?user=postgres&password=postgres"}
+ :database-url "postgresql://localhost/postgres?user=postgres&password=postgres"
+ :thl-url "https://sampo.thl.fi/pivot/prod/fi/epirapo/covid19case/fact_epirapo_covid19case.json?column=hcdmunicipality2020-445268L"}

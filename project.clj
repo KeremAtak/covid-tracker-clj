@@ -3,7 +3,8 @@
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
 
-  :dependencies [[ch.qos.logback/logback-classic "1.2.3"]
+  :dependencies [[babashka/babashka.curl "0.0.1"]
+                 [ch.qos.logback/logback-classic "1.2.3"]
                  [cheshire "5.10.0"]
                  [clojure.java-time "0.3.2"]
                  [com.fasterxml.jackson.core/jackson-core "2.11.2"]
