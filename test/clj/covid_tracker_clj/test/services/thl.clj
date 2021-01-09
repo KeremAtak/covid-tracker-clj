@@ -18,6 +18,6 @@
       (is (contains? test-data :updated))))
   (testing "thl-cases->mapped-municipalities"
     (let [thl-cases thl-helper/thl-cases
-          mapped-municipalities thl-helper/mapped-municipalities]
-      (is (= mapped-municipalities
-             (thl-service/thl-cases->mapped-municipalities thl-cases))))))
+          provinces thl-helper/provinces]
+      (is (= provinces
+             (thl-service/thl-cases->provinces thl-cases))))))
