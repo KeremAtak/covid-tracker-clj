@@ -16,8 +16,10 @@
     (let [test-url "https://sampo.thl.fi/pivot/prod/api/epirapo/covid19case.json"
           test-data (thl-service/curl-thl test-url)]
       (is (contains? test-data :updated))))
-  (testing "thl-cases->mapped-municipalities"
-    (let [thl-cases thl-helper/thl-cases
+  (testing "thl-cases->provinces"
+    (let [municipality-cases thl-helper/municipality-cases
+          province-cases thl-helper/province-cases
           provinces thl-helper/provinces]
       (is (= provinces
-             (thl-service/thl-cases->provinces thl-cases))))))
+             (thl-service/thl-cases->provinces {:municipality-cases municipality-cases
+                                                :province-cases province-cases}))))))

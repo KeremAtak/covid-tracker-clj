@@ -13,10 +13,6 @@
 (defn thl-cases->index [thl-cases]
   (->> thl-cases :dataset :dimension :hcdmunicipality2020 :category :index))
 
-(defn municipality-to-province [{:keys [municipality province-kwd provinces]}]
-  (let [[municipality-kwd municipality-data] municipality]
-    (assoc-in provinces [:shapes province-kwd :municipalities municipality-kwd] municipality-data)))
-
 (defn in-province?
   "Returns province's keyword if it has the municipality."
   [[province-kwd municipalities] municipality-name]
@@ -27,79 +23,61 @@
 (defn mapped-municipality->province-keyword
   "Returns the first found matching province keyword"
   [municipality]
-  (let [municipality-kwd (first municipality)
-        provinces thl-utils/provinces]
-    (if-let [province-kwd (some #(in-province? % municipality-kwd) provinces)]
+  (let [provinces thl-utils/provinces]
+    (if-let [province-kwd (some #(in-province? % municipality) provinces)]
       province-kwd
-      ;; This is pretty ugly code.. reconsider using names as keywords
       (cond
-        (= (str municipality-kwd) ":Koski Tl") :Koski-Tl
-        (= (str municipality-kwd) ":Pedersören Kunta") :Pedersören-Kunta
-        :else (do (println "Failure: " (str municipality-kwd))
-                  :failure)))))
+        (= (str municipality) ":Koski Tl") :Koski-Tl
+        (= (str municipality) ":Pedersören kunta") :Pedersören-Kunta
+        :else :failure))))
 
-(defn mapped-municipalities->provinces [{:keys [municipalities provinces]}]
-  (if (empty? municipalities)
-    provinces
-    (let [municipality (first municipalities)
-          rest-municipalities (rest municipalities)
-          province-kwd (mapped-municipality->province-keyword municipality)
-          new-provinces (municipality-to-province {:municipality municipality
-                                                   :province-kwd province-kwd
-                                                   :provinces provinces})]
-      (mapped-municipalities->provinces {:municipalities rest-municipalities
-                                         :provinces new-provinces}))))
+(defn insert-statistics
+  "Inserts statistics to a position pointed by map-keywords."
+  [{:keys [infection-count map-keywords mapped-locations]}]
+  (assoc-in mapped-locations map-keywords infection-count))
 
-(defn insert-location-1 [{:keys [infection-count location mapped-locations]}]
-  (let [keywordized-location (keyword location)]
-    (into mapped-locations {keywordized-location
-                            {:statistics {:infections infection-count}}})))
-
-
-(defn insert-location-2 [{:keys [infection-count location mapped-locations]}]
-  (let [keywordized-location (keyword location)]
-    (assoc-in mapped-locations [:shapes keywordized-location :statistics :infections] infection-count)))
-
-(defn locations-and-infections->mapped-locations-1
-  "Recursively returns a map which tells the total infection count of each location"
-  [{:keys [index infections locations mapped-locations]}]
+(defn municipalities-and-infections->mapped-municipalities
+  "Recursively returns a map which tells the total infection count of each municipality."
+  [{:keys [index infections municipalities mapped-municipalities]}]
   (if (empty? index)
-    mapped-locations
+    mapped-municipalities
     (let [[index-kwd index-value] (first index)
           keywordized-index-value (keyword (str index-value))
           infection-count (keywordized-index-value infections)
-          location (index-kwd locations)
+          municipality (index-kwd municipalities)
+          municipality-kwd (keyword municipality)
+          province-kwd (mapped-municipality->province-keyword municipality-kwd)
           rest-index (rest index)
-          new-mapped-locations (insert-location-1 {:index-value index-value
-                                                 :infection-count infection-count
-                                                 :location location
-                                                 :mapped-locations mapped-locations})]
-      (locations-and-infections->mapped-locations-1
+          new-mapped-municipalities (insert-statistics
+                                     {:infection-count infection-count
+                                      :map-keywords [:shapes province-kwd :municipalities municipality-kwd :statistics :infections]
+                                      :mapped-locations mapped-municipalities})]
+      (municipalities-and-infections->mapped-municipalities
        {:index rest-index
         :infections infections
-        :locations locations
-        :mapped-locations new-mapped-locations}))))
+        :municipalities municipalities
+        :mapped-municipalities new-mapped-municipalities}))))
 
-
-(defn locations-and-infections->mapped-locations-2
-  "Recursively returns a map which tells the total infection count of each location"
-  [{:keys [index infections locations mapped-locations]}]
+(defn provinces-and-infections->mapped-provinces
+  "Recursively returns a map which tells the total infection count of each province."
+  [{:keys [index infections provinces mapped-provinces]}]
   (if (empty? index)
-    mapped-locations
+    mapped-provinces
     (let [[index-kwd index-value] (first index)
           keywordized-index-value (keyword (str index-value))
           infection-count (keywordized-index-value infections)
-          location (index-kwd locations)
+          province (index-kwd provinces)
+          province-kwd (keyword province)
           rest-index (rest index)
-          new-mapped-locations (insert-location-2 {:index-value index-value
-                                                   :infection-count infection-count
-                                                   :location location
-                                                   :mapped-locations mapped-locations})]
-      (locations-and-infections->mapped-locations-2
+          new-mapped-provinces (insert-statistics
+                                {:infection-count infection-count
+                                 :map-keywords [:shapes province-kwd :statistics :infections]
+                                 :mapped-locations mapped-provinces})]
+      (provinces-and-infections->mapped-provinces
        {:index rest-index
         :infections infections
-        :locations locations
-        :mapped-locations new-mapped-locations}))))
+        :provinces provinces
+        :mapped-provinces new-mapped-provinces}))))
 
 (defn hospital-district->province
   "Replaces hospital district name with province's name."
@@ -114,31 +92,29 @@
 
 (defn provinces->provinces-with-total-infections
   "Adds each provinces' total infection count."
-  [{:keys [province-cases mapped-provinces]}]
+  [{:keys [province-cases mapped-municipalities]}]
   (let [index (thl-cases->index province-cases)
         infections (thl-cases->infections province-cases)
         hospital-districts (thl-cases->locations province-cases)
         provinces (hospital-districts->provinces hospital-districts)]
-    (locations-and-infections->mapped-locations-2
+    (provinces-and-infections->mapped-provinces
      {:index index
       :infections infections
-      :locations provinces
-      :mapped-locations mapped-provinces})))
+      :provinces provinces
+      :mapped-provinces mapped-municipalities})))
 
 (defn thl-cases->provinces [{:keys [municipality-cases province-cases]}]
   (let [index (thl-cases->index municipality-cases)
         infections (thl-cases->infections municipality-cases)
         municipalities (thl-cases->locations municipality-cases)
-        mapped-municipalities (locations-and-infections->mapped-locations-1
+        mapped-municipalities (municipalities-and-infections->mapped-municipalities
                                {:index index
                                 :infections infections
-                                :locations municipalities
-                                :mapped-locations thl-utils/empty-provinces})
-        mapped-provinces (mapped-municipalities->provinces {:municipalities mapped-municipalities
-                                                            :provinces thl-utils/empty-provinces})
-        provinces-with-total-infections (provinces->provinces-with-total-infections {:province-cases province-cases
-                                                                                     :mapped-provinces mapped-provinces})]
-    (clojure.pprint/pprint provinces-with-total-infections)
+                                :municipalities municipalities
+                                :mapped-municipalities thl-utils/empty-provinces})
+        provinces-with-total-infections (provinces->provinces-with-total-infections
+                                         {:province-cases province-cases
+                                          :mapped-municipalities mapped-municipalities})]
     provinces-with-total-infections))
 
 (defn curl-thl [address]
