@@ -20,9 +20,9 @@
                                :Varsinais-Suomi {}}})
 
 (def provinces {:Ahvenanmaa #{:Brändö :Eckerö :Finström :Föglö :Geta :Hammarland :Jomala :Kumlinge :Kökar :Lemland
-                              :Lumparland :Maarianhamana :Saltvik :Sottunga :Sund :Vårdö}
+                              :Lumparland :Maarianhamina :Saltvik :Sottunga :Sund :Vårdö}
                 :Etelä-Karjala #{:Imatra :Lappeenranta :Lemi :Luumäki :Parikkala :Rautjärvi :Ruokolahti
-                                 :Savitaipale :Tapailsaari}
+                                 :Savitaipale :Taipalsaari}
                 :Etelä-Pohjanmaa #{:Alajärvi :Alavus :Evijärvi :Ilmajoki :Isojoki :Isokyrö :Karijoki :Kauhajoki
                                    :Kauhava :Kuortane :Kurikka :Lappajärvi :Lapua :Seinäjoki :Soini :Teuva
                                    :Vimpeli :Ähtäri}
@@ -64,3 +64,29 @@
                 :Varsinais-Suomi #{:Aura :Kaarina :Koski-Tl :Kustavi :Kemiönsaari :Laitila :Lieto :Loimaa :Parainen :Marttila
                                    :Masku :Mynämäki :Naantali :Nousiainen :Oripää :Paimio :Punkalaidun :Pyhäranta :Pöytyä
                                    :Raisio :Rusko :Salo :Sauvo :Somero :Taivassalo :Turku :Uusikaupunki :Vehmaa}})
+
+(defn district-value->province-name [district-value]
+  (cond
+    (= district-value "Pohjois-Pohjanmaan SHP") "Pohjois-Pohjanmaa"
+    (= district-value "Päijät-Hämeen SHP") "Etelä-Karjala"
+    (= district-value "Etelä-Karjalan SHP") "Etelä-Savo"
+    (= district-value "Vaasan SHP") "Pohjanmaa"
+    (= district-value "Kainuun SHP") "Kainuu"
+    (= district-value "Ahvenanmaa") "Ahvenanmaa"
+    (= district-value "Etelä-Savon SHP") "Etelä-Savo"
+    (= district-value "Satakunnan SHP") "Satakunta"
+    (= district-value "Itä-Savon SHP") "Itä-Savo"
+    (= district-value "Kymenlaakson SHP") "Kymenlaakso"
+    (= district-value "Länsi-Pohjan SHP") "Länsi-Pohja"
+    (= district-value "Helsingin ja Uudenmaan SHP") "Uusimaa"
+    (= district-value "Varsinais-Suomen SHP") "Varsinais-Suomi"
+    (= district-value "Kanta-Hämeen SHP") "Kanta-Häme"
+    (= district-value "Kaikki Alueet") "Kaikki"
+    (= district-value "Pohjois-Savon SHP") "Pohjois-Savo"
+    (= district-value "Lapin SHP") "Lappi"
+    (= district-value "Etelä-Pohjanmaan SHP") "Etelä-Pohjanmaa"
+    (= district-value "Keski-Pohjanmaan SHP") "Keski-Pohjanmaa"
+    (= district-value "Pirkanmaan SHP") "Pirkanmaa"
+    (= district-value "Keski-Suomen SHP") "Keski-Suomi"
+    (= district-value "Pohjois-Karjalan SHP") "Pohjois-Karjala"
+    :else "Failed-Value"))
