@@ -115,14 +115,6 @@
       :provinces provinces
       :mapped-provinces mapped-municipalities})))
 
-(defn all-provinces-keyword?
-  "Returns the keyword if it matches "
-  [province]
-  (let [[province-keyword province-name] province]
-    (if (= province-name "Kaikki Alueet")
-      province-keyword
-      false)))
-
 (defn provinces-and-total-deaths->provinces-with-deaths
   "Inserts the total deaths to provinces."
   [{:keys [provinces province-deaths]}]
@@ -136,8 +128,8 @@
 (defn thl-cases->provinces [{:keys [municipality-cases province-cases province-deaths]}]
   (let [mapped-municipalities (thl-cases->mapped-municipalities municipality-cases)
         provinces-with-total-infections (provinces->provinces-with-total-infections
-                                         {:province-cases province-cases
-                                          :mapped-municipalities mapped-municipalities})]
+                                         {:mapped-municipalities mapped-municipalities
+                                          :province-cases province-cases})]
     (provinces-and-total-deaths->provinces-with-deaths {:province-deaths province-deaths
                                                         :provinces provinces-with-total-infections})))
 
