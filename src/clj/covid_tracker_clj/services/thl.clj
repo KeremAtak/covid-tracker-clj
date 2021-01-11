@@ -7,7 +7,7 @@
 (defn thl-cases->locations [thl-cases]
   (->> thl-cases :dataset :dimension :hcdmunicipality2020 :category :label))
 
-(defn thl-cases->infections [thl-cases]
+(defn thl-cases->value [thl-cases]
   (->> thl-cases :dataset :value))
 
 (defn thl-cases->index [thl-cases]
@@ -33,8 +33,8 @@
 
 (defn insert-statistics
   "Inserts statistics to a position pointed by map-keywords."
-  [{:keys [infection-count map-keywords mapped-locations]}]
-  (assoc-in mapped-locations map-keywords infection-count))
+  [{:keys [case-count map-keywords mapped-locations]}]
+  (assoc-in mapped-locations map-keywords case-count))
 
 (defn municipalities-and-infections->mapped-municipalities
   "Recursively returns a map which tells the total infection count of each municipality."
@@ -49,7 +49,7 @@
           province-kwd (mapped-municipality->province-keyword municipality-kwd)
           rest-index (rest index)
           new-mapped-municipalities (insert-statistics
-                                     {:infection-count infection-count
+                                     {:case-count infection-count
                                       :map-keywords [:shapes province-kwd :municipalities municipality-kwd :statistics :infections]
                                       :mapped-locations mapped-municipalities})]
       (municipalities-and-infections->mapped-municipalities
@@ -70,7 +70,7 @@
           province-kwd (keyword province)
           rest-index (rest index)
           new-mapped-provinces (insert-statistics
-                                {:infection-count infection-count
+                                {:case-count infection-count
                                  :map-keywords [:shapes province-kwd :statistics :infections]
                                  :mapped-locations mapped-provinces})]
       (provinces-and-infections->mapped-provinces
@@ -94,28 +94,48 @@
   "Adds each provinces' total infection count."
   [{:keys [province-cases mapped-municipalities]}]
   (let [index (thl-cases->index province-cases)
-        infections (thl-cases->infections province-cases)
+        value (thl-cases->value province-cases)
         hospital-districts (thl-cases->locations province-cases)
         provinces (hospital-districts->provinces hospital-districts)]
     (provinces-and-infections->mapped-provinces
      {:index index
-      :infections infections
+      :infections value
       :provinces provinces
       :mapped-provinces mapped-municipalities})))
 
-(defn thl-cases->provinces [{:keys [municipality-cases province-cases]}]
+(defn all-provinces-keyword?
+  "Returns the keyword if it matches "
+  [province]
+  (let [[province-keyword province-name] province]
+    (if (= province-name "Kaikki Alueet")
+      province-keyword
+      false)))
+
+(defn provinces-and-total-deaths->provinces-with-deaths
+  "Inserts the total deaths to provinces."
+  [{:keys [provinces province-deaths]}]
+  (let [deaths (thl-cases->value province-deaths)
+        deaths-count (val (first deaths))]
+    (insert-statistics
+     {:case-count deaths-count
+      :map-keywords [:shapes :Kaikki :statistics :deaths]
+      :mapped-locations provinces})))
+
+(defn thl-cases->provinces [{:keys [municipality-cases province-cases province-deaths]}]
   (let [index (thl-cases->index municipality-cases)
-        infections (thl-cases->infections municipality-cases)
+        value (thl-cases->value municipality-cases)
         municipalities (thl-cases->locations municipality-cases)
         mapped-municipalities (municipalities-and-infections->mapped-municipalities
                                {:index index
-                                :infections infections
+                                :infections value
                                 :municipalities municipalities
                                 :mapped-municipalities thl-utils/empty-provinces})
         provinces-with-total-infections (provinces->provinces-with-total-infections
                                          {:province-cases province-cases
-                                          :mapped-municipalities mapped-municipalities})]
-    provinces-with-total-infections))
+                                          :mapped-municipalities mapped-municipalities})
+        provinces-with-deaths (provinces-and-total-deaths->provinces-with-deaths {:province-deaths province-deaths
+                                                                                  :provinces provinces-with-total-infections})]
+    provinces-with-deaths))
 
 (defn curl-thl [address]
   (->> address get :body (m/decode "application/json")))
@@ -123,7 +143,8 @@
 (defn get-thl-infections []
   (let [thl-municipality-cases (curl-thl (:thl-municipality-infections env))
         thl-province-cases (curl-thl (:thl-province-infections env))
-        thl-deaths (curl-thl "https://sampo.thl.fi/pivot/prod/fi/epirapo/covid19case/fact_epirapo_covid19case.json?row=hcdmunicipality2020-445222&column=dateweek20200101-509030&filter=measure-492118")
+        thl-province-deaths (curl-thl (:thl-province-deaths env))
         provinces (thl-cases->provinces {:municipality-cases thl-municipality-cases
-                                         :province-cases thl-province-cases})]
+                                         :province-cases thl-province-cases
+                                         :province-deaths thl-province-deaths})]
     provinces))

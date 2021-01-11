@@ -1,7 +1,8 @@
 (ns covid-tracker-clj.test.services.thl-helper)
 
 (def provinces {:shapes
-                {:Kaikki {:statistics {:infections "38590"}}
+                {:Kaikki {:statistics {:infections "38590"
+                                       :deaths "513"}}
                  :Keski-Pohjanmaa {}
                  :Pohjois-Pohjanmaa {}
                  :Uusimaa
@@ -61,8 +62,6 @@
                        :13 "409"
                        :8 "512"
                        :20 "22527"}
-                      :label "Tartuntatautirekisterin COVID-19-tapaukset"
-                      :class "dataset"
                       :dimension
                       {:hcdmunicipality2020
                        {:category
@@ -77,10 +76,56 @@
                           :445193 "Helsingin ja Uudenmaan SHP"
                           :445155 "Etelä-Savon SHP"
                           :445293 "Pohjois-Karjalan SHP"
-                          :445225 "Etelä-Pohjanmaan SHP"}}}
-                       :measure
-                       {:category
-                        {:index {:444833 0}, :label {:444833 "Tapausten lukumäärä"}}}
-                       :size [22 1]
-                       :id ["hcdmunicipality2020" "measure"]}
-                      :version "2.0"}})
+                          :445225 "Etelä-Pohjanmaan SHP"}}}}}})
+
+(def province-death-cases {:dataset
+                           {:value {:21 "513"}
+                            :dimension
+                            {:hcdmunicipality2020
+                             {:category
+                              {:index
+                               {:445170 2
+                                :445223 11
+                                :445206 3
+                                :445175 9
+                                :445043 7
+                                :445222 21
+                                :444996 16
+                                :445190 18
+                                :445282 4
+                                :445230 15
+                                :445224 19
+                                :445285 12
+                                :445193 20
+                                :445014 5
+                                :445155 8
+                                :445293 10
+                                :445131 0
+                                :445079 14
+                                :445197 1
+                                :445225 13
+                                :445178 6
+                                :445101 17}
+                               :label
+                               {:445170 "Satakunnan SHP"
+                                :445223 "Pohjois-Savon SHP"
+                                :445206 "Kanta-Hämeen SHP"
+                                :445175 "Itä-Savon SHP"
+                                :445043 "Etelä-Karjalan SHP"
+                                :445222 "Kaikki Alueet"
+                                :444996 "Pohjois-Pohjanmaan SHP"
+                                :445190 "Länsi-Pohjan SHP"
+                                :445282 "Pirkanmaan SHP"
+                                :445230 "Keski-Pohjanmaan SHP"
+                                :445224 "Lapin SHP"
+                                :445285 "Keski-Suomen SHP"
+                                :445193 "Helsingin ja Uudenmaan SHP"
+                                :445014 "Päijät-Hämeen SHP"
+                                :445155 "Etelä-Savon SHP"
+                                :445293 "Pohjois-Karjalan SHP"
+                                :445131 "Ahvenanmaa"
+                                :445079 "Vaasan SHP"
+                                :445197 "Varsinais-Suomen SHP"
+                                :445225 "Etelä-Pohjanmaan SHP"
+                                :445178 "Kymenlaakson SHP"
+                                :445101 "Kainuun SHP"}}}}}})

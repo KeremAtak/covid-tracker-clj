@@ -19,7 +19,9 @@
   (testing "thl-cases->provinces"
     (let [municipality-cases thl-helper/municipality-cases
           province-cases thl-helper/province-cases
+          province-death-cases thl-helper/province-death-cases
           provinces thl-helper/provinces]
       (is (= provinces
              (thl-service/thl-cases->provinces {:municipality-cases municipality-cases
-                                                :province-cases province-cases}))))))
+                                                :province-cases province-cases
+                                                :province-deaths province-death-cases}))))))
