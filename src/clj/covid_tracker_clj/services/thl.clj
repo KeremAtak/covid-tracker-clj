@@ -58,7 +58,17 @@
         :municipalities municipalities
         :mapped-municipalities new-mapped-municipalities}))))
 
-(defn provinces-and-infections->mapped-provinces
+(defn thl-cases->mapped-municipalities [municipality-cases]
+  (let [index (thl-cases->index municipality-cases)
+        value (thl-cases->value municipality-cases)
+        municipalities (thl-cases->locations municipality-cases)]
+    (municipalities-and-infections->mapped-municipalities
+     {:index index
+      :infections value
+      :municipalities municipalities
+      :mapped-municipalities thl-utils/empty-provinces})))
+
+(defn provinces-and-infections->provinces-with-total-infections
   "Recursively returns a map which tells the total infection count of each province."
   [{:keys [index infections provinces mapped-provinces]}]
   (if (empty? index)
@@ -73,7 +83,7 @@
                                 {:case-count infection-count
                                  :map-keywords [:shapes province-kwd :statistics :infections]
                                  :mapped-locations mapped-provinces})]
-      (provinces-and-infections->mapped-provinces
+      (provinces-and-infections->provinces-with-total-infections
        {:index rest-index
         :infections infections
         :provinces provinces
@@ -97,7 +107,7 @@
         value (thl-cases->value province-cases)
         hospital-districts (thl-cases->locations province-cases)
         provinces (hospital-districts->provinces hospital-districts)]
-    (provinces-and-infections->mapped-provinces
+    (provinces-and-infections->provinces-with-total-infections
      {:index index
       :infections value
       :provinces provinces
@@ -122,20 +132,12 @@
       :mapped-locations provinces})))
 
 (defn thl-cases->provinces [{:keys [municipality-cases province-cases province-deaths]}]
-  (let [index (thl-cases->index municipality-cases)
-        value (thl-cases->value municipality-cases)
-        municipalities (thl-cases->locations municipality-cases)
-        mapped-municipalities (municipalities-and-infections->mapped-municipalities
-                               {:index index
-                                :infections value
-                                :municipalities municipalities
-                                :mapped-municipalities thl-utils/empty-provinces})
+  (let [mapped-municipalities (thl-cases->mapped-municipalities municipality-cases)
         provinces-with-total-infections (provinces->provinces-with-total-infections
                                          {:province-cases province-cases
-                                          :mapped-municipalities mapped-municipalities})
-        provinces-with-deaths (provinces-and-total-deaths->provinces-with-deaths {:province-deaths province-deaths
-                                                                                  :provinces provinces-with-total-infections})]
-    provinces-with-deaths))
+                                          :mapped-municipalities mapped-municipalities})]
+    (provinces-and-total-deaths->provinces-with-deaths {:province-deaths province-deaths
+                                                        :provinces provinces-with-total-infections})))
 
 (defn curl-thl [address]
   (->> address get :body (m/decode "application/json")))
@@ -143,8 +145,7 @@
 (defn get-thl-infections []
   (let [thl-municipality-cases (curl-thl (:thl-municipality-infections env))
         thl-province-cases (curl-thl (:thl-province-infections env))
-        thl-province-deaths (curl-thl (:thl-province-deaths env))
-        provinces (thl-cases->provinces {:municipality-cases thl-municipality-cases
-                                         :province-cases thl-province-cases
-                                         :province-deaths thl-province-deaths})]
-    provinces))
+        thl-province-deaths (curl-thl (:thl-province-deaths env))]
+    (thl-cases->provinces {:municipality-cases thl-municipality-cases
+                           :province-cases thl-province-cases
+                           :province-deaths thl-province-deaths})))
