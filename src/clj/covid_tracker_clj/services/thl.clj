@@ -13,6 +13,11 @@
 (defn thl-cases->index [thl-cases]
   (->> thl-cases :dataset :dimension :hcdmunicipality2020 :category :index))
 
+(defn insert-statistics
+  "Inserts statistics to a position pointed by map-keywords."
+  [{:keys [case-count map-keywords mapped-locations]}]
+  (assoc-in mapped-locations map-keywords case-count))
+
 (defn in-province?
   "Returns province's keyword if it has the municipality."
   [[province-kwd municipalities] municipality-name]
@@ -20,21 +25,18 @@
     province-kwd
     false))
 
-(defn mapped-municipality->province-keyword
+(defn municipality-kwd->province-kwd
   "Returns the first found matching province keyword"
-  [municipality]
+  [municipality-kwd]
   (let [provinces thl-utils/provinces]
-    (if-let [province-kwd (some #(in-province? % municipality) provinces)]
-      province-kwd
-      (cond
-        (= (str municipality) ":Koski Tl") :Koski-Tl
-        (= (str municipality) ":Pedersören kunta") :Pedersören-Kunta
-        :else :failure))))
+    (some #(in-province? % municipality-kwd) provinces)))
 
-(defn insert-statistics
-  "Inserts statistics to a position pointed by map-keywords."
-  [{:keys [case-count map-keywords mapped-locations]}]
-  (assoc-in mapped-locations map-keywords case-count))
+(defn municipality-name->municipality-kwd [municipality-name]
+  ;; this is pretty ugly code.. consider not using keywords as names
+  (cond
+    (= "Pedersören kunta" municipality-name) :Pedersören-kunta
+    (= "Koski Tl" municipality-name) :Koski-Tl
+    :else (keyword municipality-name)))
 
 (defn municipalities-and-infections->mapped-municipalities
   "Recursively returns a map which tells the total infection count of each municipality."
@@ -44,9 +46,9 @@
     (let [[index-kwd index-value] (first index)
           keywordized-index-value (keyword (str index-value))
           infection-count (keywordized-index-value infections)
-          municipality (index-kwd municipalities)
-          municipality-kwd (keyword municipality)
-          province-kwd (mapped-municipality->province-keyword municipality-kwd)
+          municipality-name (index-kwd municipalities)
+          municipality-kwd (municipality-name->municipality-kwd municipality-name)
+          province-kwd (municipality-kwd->province-kwd municipality-kwd)
           rest-index (rest index)
           new-mapped-municipalities (insert-statistics
                                      {:case-count infection-count

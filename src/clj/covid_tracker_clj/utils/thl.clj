@@ -44,7 +44,7 @@
                              :Lempäälä :Mänttä-Vilppula :Nokia :Orivesi :Parkano :Pälkäne :Pirkkala :Ruovesi
                              :Sastamala :Tampere :Urjala :Valkeakoski :Vesilahti :Virrat :Ylöjärvi}
                 :Pohjanmaa #{:Kaskinen :Korsnäs :Kristiinankaupunki :Laihia :Luoto :Maalahti :Mustasaari :Närpiö 
-                             :Pietarsaari :Pedersören-Kunta :Uusikaarlepyy :Vaasa :Vöyri}
+                             :Pietarsaari :Pedersören-kunta :Uusikaarlepyy :Vaasa :Vöyri}
                 :Pohjois-Karjala #{:Heinävesi :Ilomantsi :Joensuu :Juuka :Kitee :Kontiolahti :Outokumpu :Lieksa
                                    :Liperi :Nurmes :Polvijärvi :Rääkkylä :Tohmajärvi}
                 :Pohjois-Pohjanmaa #{:Alavieska :Haapajärvi :Haapavesi :Hailuoto :Ii :Kalajoki :Kempele :Kuusamo

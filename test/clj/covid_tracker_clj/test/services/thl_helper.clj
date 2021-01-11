@@ -14,10 +14,7 @@
                  :Keski-Suomi {}
                  :Päijät-Häme {}
                  :Pirkanmaa {}
-                 :Etelä-Savo
-                 {:statistics {:infections "512"}
-                  :municipalities
-                  {:Juva {:statistics {:infections "66"}}}}
+                 :Etelä-Savo {}
                  :Pohjois-Karjala
                  {:statistics {:infections "410"}
                   :municipalities
@@ -31,16 +28,23 @@
                  {:statistics {:infections "409"}
                   :municipalities
                   {:Seinäjoki {:statistics {:infections "129"}}}}
-                 :Pohjanmaa {}
+                 :Pohjanmaa
+                 {:statistics {:infections "331"}
+                  :municipalities
+                  {:Pedersören-kunta {:statistics {:infections ".."}}}}
                  :Ahvenanmaa {}
-                 :Varsinais-Suomi {}}})
+                 :Varsinais-Suomi
+                 {:statistics {:infections "512"}
+                  :municipalities
+                  {:Koski-Tl {:statistics {:infections "66"}}}}}})
 
 (def municipality-cases {:dataset
                          {:value {:10 "66"
                                   :16 "129"
                                   :8 "5012"
                                   :14 "2411"
-                                  :50 ".."}
+                                  :50 ".."
+                                  :102 ".."}
                           :dimension
                           {:hcdmunicipality2020
                            {:category
@@ -48,11 +52,13 @@
                                      :444182 8
                                      :447912 16
                                      :447712 14
+                                     :446221 102
                                      :444111 50}
-                             :label {:445177 "Juva"
+                             :label {:445177 "Koski Tl"
                                      :444182 "Helsinki"
                                      :444111 "Rääkkylä"
                                      :447712 "Espoo"
+                                     :446221 "Pedersören kunta"
                                      :447912 "Seinäjoki"}}}}}})
 
 (def province-cases {:dataset
@@ -60,6 +66,7 @@
                       {:10 "410"
                        :21 "38590"
                        :13 "409"
+                       :2 "331"
                        :8 "512"
                        :20 "22527"}
                       :dimension
@@ -70,12 +77,14 @@
                           :445193 20
                           :445155 8
                           :445293 10
-                          :445225 13}
+                          :445225 13
+                          :445212 2}
                          :label
                          {:445222 "Kaikki Alueet"
                           :445193 "Helsingin ja Uudenmaan SHP"
-                          :445155 "Etelä-Savon SHP"
+                          :445155 "Varsinais-Suomen SHP"
                           :445293 "Pohjois-Karjalan SHP"
+                          :445212 "Vaasan SHP"
                           :445225 "Etelä-Pohjanmaan SHP"}}}}}})
 
 (def province-death-cases {:dataset
