@@ -17,3 +17,5 @@ profiles.clj
 .hgignore
 .hg/
 .vscode
+.clj-kondo
+.lsp
