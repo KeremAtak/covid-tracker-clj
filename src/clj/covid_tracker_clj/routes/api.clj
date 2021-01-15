@@ -1,10 +1,12 @@
 (ns covid-tracker-clj.routes.api
-    (:require [covid-tracker-clj.middleware.exception :as exception]
+    (:require [covid-tracker-clj.config :refer [env]]
+              [covid-tracker-clj.middleware.exception :as exception]
               [covid-tracker-clj.middleware.formats :as formats]
               [covid-tracker-clj.routes.files :refer [file-routes]]
               [covid-tracker-clj.routes.health :refer [health-routes]]
               [covid-tracker-clj.routes.math :refer [math-routes]]
               [covid-tracker-clj.routes.thl :refer [thl-routes]]
+              [ring.middleware.cors :refer [wrap-cors]]
               [reitit.coercion.spec :as spec-coercion]
               [reitit.ring.coercion :as coercion]
               [reitit.ring.middleware.multipart :as multipart]
@@ -33,7 +35,11 @@
                  ;; coercing request parameters
                  coercion/coerce-request-middleware
                  ;; multipart
-                 multipart/multipart-middleware]}
+                 multipart/multipart-middleware
+                 ;; cors
+                 [wrap-cors
+                  :access-control-allow-origin [(re-pattern (str (:frontend-url env) "/*"))]
+                  :access-control-allow-methods [:get]]]}
 
    ;; swagger documentation
    ["" {:no-doc true
