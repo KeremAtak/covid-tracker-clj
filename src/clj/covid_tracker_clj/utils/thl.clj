@@ -28,9 +28,6 @@
                                    :Vimpeli :Ähtäri}
                 :Etelä-Savo #{:Enonkoski :Hirvensalmi :Joroinen :Juva :Kangasniemi :Mikkeli :Mäntyharju :Pertunmaa
                               :Pieksämäki :Puumala :Rantasalmi :Savonlinna :Sulkava}
-                :Lappi #{:Enontekiö :Inari :Kemi :Kemijärvi :Keminmaa :Kittilä :Kolari :Muonio :Pelkosenniemi
-                         :Pello :Posio :Ranua :Rovaniemi :Salla :Savukoski :Sodankylä :Simo :Tervola :Tornio
-                         :Utsjoki :Ylitornio}
                 :Kainuu #{:Hyrynsalmi :Kajaani :Kuhmo :Paltamo :Puolanka :Ristijärvi :Sotkamo :Suomussalmi}
                 :Kanta-Häme #{:Forssa :Hattula :Hausjärvi :Humppila :Hämeenlinna :Janakkala :Jokioinen :Loppi
                               :Riihimäki :Tammela :Ypäjä}
@@ -40,10 +37,13 @@
                                :Konnevesi :Kyyjärvi :Laukaa :Luhanka :Multia :Muurame :Petäjävesi :Pihtipudas
                                :Saarijärvi :Toivakka :Uurainen :Viitasaari :Äänekoski}
                 :Kymenlaakso #{:Hamina :Kotka :Kouvola :Miehikkälä :Pyhtää :Virolahti}
+                :Lappi #{:Enontekiö :Inari :Kemijärvi :Kittilä :Kolari :Muonio :Pelkosenniemi :Pello :Posio :Ranua
+                         :Rovaniemi :Salla :Savukoski :Sodankylä :Utsjoki}
+                :Länsi-Pohja #{:Kemi :Keminmaa :Simo :Tervola :Tornio :Ylitornio}
                 :Pirkanmaa #{:Akaa :Hämeenkyrö :Ikaalinen :Juupajoki :Jämsä :Kangasala :Kihniö :Kuhmoinen
                              :Lempäälä :Mänttä-Vilppula :Nokia :Orivesi :Parkano :Pälkäne :Pirkkala :Ruovesi
                              :Sastamala :Tampere :Urjala :Valkeakoski :Vesilahti :Virrat :Ylöjärvi}
-                :Pohjanmaa #{:Kaskinen :Korsnäs :Kristiinankaupunki :Laihia :Luoto :Maalahti :Mustasaari :Närpiö 
+                :Pohjanmaa #{:Kaskinen :Korsnäs :Kristiinankaupunki :Laihia :Luoto :Maalahti :Mustasaari :Närpiö
                              :Pietarsaari :Pedersören-kunta :Uusikaarlepyy :Vaasa :Vöyri}
                 :Pohjois-Karjala #{:Heinävesi :Ilomantsi :Joensuu :Juuka :Kitee :Kontiolahti :Outokumpu :Lieksa
                                    :Liperi :Nurmes :Polvijärvi :Rääkkylä :Tohmajärvi}
