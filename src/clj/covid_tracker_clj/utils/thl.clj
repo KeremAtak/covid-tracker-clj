@@ -26,8 +26,9 @@
                 :Etelä-Pohjanmaa #{:Alajärvi :Alavus :Evijärvi :Ilmajoki :Isojoki :Isokyrö :Karijoki :Kauhajoki
                                    :Kauhava :Kuortane :Kurikka :Lappajärvi :Lapua :Seinäjoki :Soini :Teuva
                                    :Vimpeli :Ähtäri}
-                :Etelä-Savo #{:Enonkoski :Hirvensalmi :Joroinen :Juva :Kangasniemi :Mikkeli :Mäntyharju :Pertunmaa
-                              :Pieksämäki :Puumala :Rantasalmi :Savonlinna :Sulkava}
+                :Etelä-Savo #{:Hirvensalmi :Joroinen :Juva :Kangasniemi :Mikkeli :Mäntyharju :Pertunmaa
+                              :Pieksämäki :Puumala}
+                :Itä-Savo #{:Enonkoski :Rantasalmi :Savonlinna :Sulkava}
                 :Kainuu #{:Hyrynsalmi :Kajaani :Kuhmo :Paltamo :Puolanka :Ristijärvi :Sotkamo :Suomussalmi}
                 :Kanta-Häme #{:Forssa :Hattula :Hausjärvi :Humppila :Hämeenlinna :Janakkala :Jokioinen :Loppi
                               :Riihimäki :Tammela :Ypäjä}
