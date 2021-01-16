@@ -2,7 +2,7 @@
  :prod true
  :database-url "postgresql://localhost/postgres?user=postgres&password=postgres"
  ;frontend-url
- :frontend-url "https://covid-tracker-cljs.herokuapp.com/"
+ :frontend-url "https://covid-tracker-cljs.herokuapp.com"
  ;thl api urls
  :thl-municipality-infections "https://sampo.thl.fi/pivot/prod/fi/epirapo/covid19case/fact_epirapo_covid19case.json?column=hcdmunicipality2020-445268L"
  :thl-province-deaths "https://sampo.thl.fi/pivot/prod/fi/epirapo/covid19case/fact_epirapo_covid19case.json?row=hcdmunicipality2020-445222&column=measure-492118"
