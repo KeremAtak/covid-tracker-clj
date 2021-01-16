@@ -1,4 +1,4 @@
-# covid-tracker-cljs
+# covid-tracker-clj
 
 This application serves the backend for the covid-tracker-cljs.
 
