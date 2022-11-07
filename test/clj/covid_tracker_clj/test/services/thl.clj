@@ -22,6 +22,4 @@
           province-death-cases thl-helper/province-death-cases
           provinces thl-helper/provinces]
       (is (= provinces
-             (thl-service/thl-cases->provinces {:municipality-cases municipality-cases
-                                                :province-cases province-cases
-                                                :province-deaths province-death-cases}))))))
+             (thl-service/thl-cases->provinces municipality-cases province-cases province-death-cases))))))
